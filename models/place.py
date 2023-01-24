@@ -2,8 +2,16 @@
 """ Place Module for HBNB project """
 from models.base_model import BaseModel, Base
 from os import getenv
-from sqlalchemy import Column, String, ForeignKey, Integer, Float
+from sqlalchemy import Table, Column, String, ForeignKey, Integer, Float
 from sqlalchemy.orm import relationship
+from models.review import Review
+
+
+place_amenity = Table("place_amenity", Base.metadata,
+                      Column('place_id', String(60),
+                             ForeignKey('places.id'), primary_key=True),
+                      Column('amenity_id', String(60),
+                             ForeignKey('amenities.id'), primary_key=True))
 
 
 class Place(BaseModel, Base):
@@ -21,7 +29,10 @@ class Place(BaseModel, Base):
         latitude = Column(Float, nullable=True)
         longitude = Column(Float, nullable=True)
         amenity_ids = []
+
         reviews = relationship("Review", cascade="delete", backref="place")
+        amenities = relationship("Amenity",
+                                 secondary="place_amenity", viewonly=False)
 
     else:
         city_id = ""
@@ -47,3 +58,22 @@ class Place(BaseModel, Base):
                 if self.id == inst.place_id:
                     inst_list.append(inst)
             return (inst_list)
+
+        @property
+        def amenities(self):
+            """Return list of matched instances"""
+            from models import storage
+            inst_list = []
+            amenity_dict = storage.all(Amenity)
+
+            for inst in amenity_dict.values():
+                if inst.id in self.amenity_ids:
+                    inst_list.append(inst)
+            return (inst_list)
+
+        @amenities_setter
+        def amenities(self, obj=None):
+            """Handles append method for class"""
+            from models.amenity import Amenity
+            if type(obj) == Amenity:
+                self.amenity_ids.append(obj.id)
