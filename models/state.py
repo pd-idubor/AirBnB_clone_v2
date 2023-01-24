@@ -10,11 +10,12 @@ from models.city import City
 
 class State(BaseModel, Base):
     """ State class """
-
     if getenv("HBNB_TYPE_STORAGE") == 'db':
         __tablename__ = "states"
         name = Column(String(128), nullable=False)
-        cities = relationship("City", backref="state", cascade="delete")
+        cities = relationship("City",
+                              cascade="delete",
+                              backref="state")
 
     else:
         name = ""
@@ -23,7 +24,9 @@ class State(BaseModel, Base):
         def cities(self):
             """Return list of related city objects"""
             city_list = []
-            for val in list(models.storage.all(City).values()):
-                if val.state_id == self.id:
+            cities_dict = storage.all(City)
+
+            for val in cities_dict.values():
+                if self.id == val.state_id:
                     city_list.append(val)
             return (city_list)

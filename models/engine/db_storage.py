@@ -48,8 +48,7 @@ class DBStorage():
             classes = ['User', 'State', 'City', 'Amenity', 'Place', 'Review']
             for name in classes:
                 try:
-                    result = self.__session.query(eval
-                                                (name)).all()
+                    result = self.__session.query(eval(name)).all()
                     for obj in result:
                         key = obj.__class__.__name__ + '.' + obj.id
                         objects_dict[key] = (obj)
