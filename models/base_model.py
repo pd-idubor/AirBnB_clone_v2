@@ -80,7 +80,7 @@ class BaseModel:
         cur_dict['__class__'] = str(type(self).__name__)
         cur_dict['created_at'] = self.created_at.isoformat()
         cur_dict['updated_at'] = self.updated_at.isoformat()
-        
+
         return cur_dict
 
     def delete(self):
