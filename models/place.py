@@ -3,6 +3,7 @@
 from models.base_model import BaseModel, Base
 from os import getenv
 from sqlalchemy import Column, String, ForeignKey, Integer, Float
+from sqlalchemy.orm import relationship
 
 
 class Place(BaseModel, Base):
@@ -20,6 +21,7 @@ class Place(BaseModel, Base):
         latitude = Column(Float, nullable=True)
         longitude = Column(Float, nullable=True)
         amenity_ids = []
+        reviews = relationship("Review", cascade="delete", backref="place")
 
     else:
         city_id = ""
@@ -33,3 +35,15 @@ class Place(BaseModel, Base):
         latitude = 0.0
         longitude = 0.0
         amenity_ids = []
+
+        @property
+        def reviews(self):
+            """Returns list of matched instances"""
+            from models import storage
+            inst_list = []
+            rev_dict = storage.all(Review)
+
+            for inst in rev_dict.values():
+                if self.id == inst.place_id:
+                    inst_list.append(inst)
+            return (inst_list)
