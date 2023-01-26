@@ -5,21 +5,23 @@
 sudo apt-get update
 sudo apt-get install nginx -y
 
+#Firewall
+sudo ufw allow 'Nginx HTTP'
 
-mkdir -p /data/web_static/shared/
-mkdir -p /data/web_static/releases/test/
-mkdir -p /data/web_static/current
 
-"Simple content to test Nginx configuration" > /data/web_static/releases/test/index.html
+[ ! -d /data/web_static/shared/ ] && mkdir -p /data/web_static/shared/
+[ ! -d /data/web_static/releases/test/ ] && mkdir -p /data/web_static/releases/test/
 
-if test -L /data/web_static/current; then
-	rm /data/web_static/current
-	fi
-ln -s /data/web_static/current /data/web_static/releases/test/
+echo "Simple content to test Nginx configuration" > /data/web_static/releases/test/index.html
 
-sudo chown -R "ubuntu:ubuntu" /data
+[ -f /data/web_static/current ] && sudo rm /data/web_static/current
+sudo ln -sf /data/web_static/releases/test/ /data/web_static/current
 
-detail="alais \/data\/web_static\/current\/;\n\n\tautoindex off;\n}\n"
-location="}\n\nlocation /hbnb_static {\n\n\t$detail"
-sed -i "1,/}/ s|}|$location|" /etc/nginx/sites-available/default"
-sudo nginx service restart
+sudo chown -R "ubuntu:ubuntu" /data/
+
+
+detail="alais \/data\/web_static\/current\/;\n\t}\n"
+location="\n\tlocation \/hbnb_static {\n\n\t$detail"
+sed -i "37s/$/$location/" /etc/nginx/sites-available/default
+
+sudo service nginx restart
