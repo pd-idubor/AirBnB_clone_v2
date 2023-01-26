@@ -3,7 +3,7 @@
 
 #Install nginx if not installed
 sudo apt-get update
-sudo apt-get install nginx -y
+[ ! -f /usr/sbin/nginx ] && sudo apt-get install -y nginx
 
 #Firewall
 sudo ufw allow 'Nginx HTTP'
@@ -20,8 +20,8 @@ sudo ln -sf /data/web_static/releases/test/ /data/web_static/current
 sudo chown -R "ubuntu:ubuntu" /data/
 
 
-detail="alais \/data\/web_static\/current\/;\n\t}\n"
-location="\n\tlocation \/hbnb_static {\n\n\t$detail"
+detail="alais \/data\/web\_static\/current\/;\n\t}\n"
+location="\n\tlocation \/hbnb\_static\/ {\n\t\t$detail"
 sed -i "37s/$/$location/" /etc/nginx/sites-available/default
 
 sudo service nginx restart
