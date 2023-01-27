@@ -2,7 +2,7 @@
 """Script that deploys archives to web server"""
 import os.path
 from datetime import datetime
-from fabric.api import local, put, run
+from fabric.api import *
 
 
 def do_pack():
@@ -24,8 +24,11 @@ def do_pack():
 def do_deploy(archive_path):
     """Deploy archives"""
 
+    if not os.path.exists(archive_path):
+        return False
+
     archive = os.path.basename(archive_path)
-    arch_name= os.path.splitext(archive)[0]
+    arch_name = os.path.splitext(archive)[0]
     tmp_dir = "/tmp/"
     put(archive_path, tmp_dir + archive)
 
