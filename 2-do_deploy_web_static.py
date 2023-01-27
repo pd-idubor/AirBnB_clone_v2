@@ -4,6 +4,8 @@ import os
 from datetime import datetime
 from fabric.api import *
 
+env.hosts = ['54.237.29.20', '54.236.47.104']
+
 
 def do_pack():
     """Create archive with add web_static files"""
