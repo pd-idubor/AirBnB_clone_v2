@@ -8,7 +8,7 @@ env.hosts = ['54.237.29.20', '54.236.47.104']
 
 def do_clean(number=0):
     """Delete out dated archives"""
-    
+
     number = 1 if int(number) == 0 else int(number)
 
     archives = sorted(os.listdir("versions"))
