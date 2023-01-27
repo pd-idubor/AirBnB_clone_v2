@@ -46,7 +46,7 @@ def do_deploy(archive_path):
 
 def deploy():
     """Creates and distributes archives to web servers"""
-    arch_path = do_pack()
-    if not arch_path:
+    archive_path = do_pack()
+    if not archive_path:
         return False
-    do_deploy(archive_path)
+    return do_deploy(archive_path)
