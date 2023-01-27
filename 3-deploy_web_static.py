@@ -16,10 +16,10 @@ def do_pack():
     name = "web_static_{}.tgz".format(now)
     archive_path = "versions/{}".format(name)
 
-    local("tar -cvzf {} web_static".format(path))
+    local("tar -cvzf {} web_static".format(archive_path))
 
-    if os.path.exists(path):
-        return path
+    if os.path.exists(archive_path):
+        return archive_path
     return None
 
 
