@@ -1,6 +1,6 @@
 #!/usr/bin/python3
-"""Script that deploys archives to web server"""
-import os.path
+"""Script compressing files into an archive"""
+import os
 from datetime import datetime
 from fabric.api import *
 
@@ -14,33 +14,31 @@ def do_pack():
     name = "web_static_{}.tgz".format(now)
     archive_path = "versions/{}".format(name)
 
-    local("tar -cvzf {} web_static".format(archive_path))
+    local("tar -cvzf {} web_static".format(path))
 
-    if os.path.exists(archive_path):
-        return archive_path
+    if os.path.exists(path):
+        return path
     return None
 
 
 def do_deploy(archive_path):
-    """Deploy archives"""
-
+    """Deploys archive to web servers"""
     if not os.path.exists(archive_path):
         return False
 
-    archive = os.path.basename(archive_path)
-    arch_name = os.path.splitext(archive)[0]
-    tmp_dir = "/tmp/"
-    put(archive_path, tmp_dir + archive)
+    name = os.path.basename(archive_path)
+    arch_name = os.path.splitext(name)[0]
+    tmp_dir = '/tmp/'
+    release_dir = '/data/web_static/releases/'
+    release_path = release_dir + arch_name + '/'
+    sym_dir = '/data/web_static/current'
 
-    dest_dir = "/data/web_static/releases/"
-    dest_path = dest_dir + arch_name + "/"
-    run('mkdir -p ' + dest_path)
-    run('tar -zxf ' + tmp_dir + archive + ' -C ' + dest_path)
-    run('rm ' + tmp_dir + archive)
-    run('mv ' + dir_path + 'web_static/* ' + dir_path)
-    run('rm -rf ' + dir_path + 'web_static')
-
-    link_dir = '/data/web_static/current'
-    run('rm -rf ' + link_dir)
-    run('ln -s ' + dir_path + ' ' + link_dir)
+    put(archive_path, tmp_dir + name)
+    run('mkdir -p ' + release_path)
+    run('tar -xzf ' + tmp_dir + name + ' -C ' + release_path)
+    run('rm ' + tmp_dir + name)
+    run('mv ' + release_path + 'web_static/* ' + release_path)
+    run('rm -rf ' + release_path + 'web_static')
+    run('rm -rf ' + sym_dir)
+    run('ln -s ' + release_path + ' ' + sym_dir)
     return True
