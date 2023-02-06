@@ -24,8 +24,8 @@ def c_info(text):
     return ('C {}'.format(text))
 
 
-@app.route("/python", strict_slashes=False)
-@app.route('/python/(<text>)', strict_slashes=False)
+@app.route('/python', strict_slashes=False)
+@app.route('/python/<text>', strict_slashes=False)
 def py_info(text="is cool"):
     """Displays 'python' with some text"""
     return ("Python {}".format(text.replace('_', ' ')))
