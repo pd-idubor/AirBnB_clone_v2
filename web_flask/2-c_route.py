@@ -21,7 +21,7 @@ def info():
 def c_info(text):
     """Displays 'C' and other text"""
     text = text.replace('_', ' ')
-    return ('C {}'.format(escape(text)))
+    return ('C {}'.format(text))
 
 
 if __name__ == "__main__":
