@@ -6,7 +6,6 @@ from sqlalchemy import Table, Column, String, ForeignKey, Integer, Float
 from sqlalchemy.orm import relationship
 from models.review import Review
 
-
 place_amenity = Table("place_amenity", Base.metadata,
                       Column('place_id', String(60),
                              ForeignKey('places.id'), primary_key=True),
@@ -71,7 +70,7 @@ class Place(BaseModel, Base):
                     inst_list.append(inst)
             return (inst_list)
 
-        @amenities_setter
+        @amenities.setter
         def amenities(self, obj=None):
             """Handles append method for class"""
             from models.amenity import Amenity
