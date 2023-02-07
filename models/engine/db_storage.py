@@ -53,7 +53,7 @@ class DBStorage():
                         key = obj.__class__.__name__ + '.' + obj.id
                         objects_dict[key] = (obj)
                 except Exception:
-                    pass
+                    continue
 
         return (objects_dict)
 

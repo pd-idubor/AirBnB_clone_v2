@@ -12,12 +12,11 @@ Base = declarative_base()
 class BaseModel:
     """A base class for all hbnb models"""
 
-    if getenv("HBNB_TYPE_STORAGE") == 'db':
-        id = Column(String(60), primary_key=True)
-        created_at = Column(DateTime, nullable=False,
-                            default=datetime.utcnow())
-        updated_at = Column(DateTime, nullable=False,
-                            default=datetime.utcnow())
+    id = Column(String(60), primary_key=True)
+    created_at = Column(DateTime, nullable=False,
+                        default=datetime.utcnow())
+    updated_at = Column(DateTime, nullable=False,
+                        default=datetime.utcnow())
 
     def __init__(self, *args, **kwargs):
         """Instantiates a new model"""
@@ -32,6 +31,11 @@ class BaseModel:
                     self.id = str(uuid.uuid4())
                 if 'created_at' not in kwargs:
                     self.created_at = datetime.now()
+
+                if 'created_at' in kwargs and 'updated_at' not in kwargs:
+                    self.updated_at = self.created_at
+                else:
+                    self.updated_at = datetime.now()
         else:
             self.id = str(uuid.uuid4())
             self.created_at = self.updated_at = datetime.now()
@@ -58,6 +62,7 @@ class BaseModel:
         cur_dict = self.__dict__.copy()
         try:
             del cur_dict['_sa_instance_state']
+
         except KeyError:
             pass
 

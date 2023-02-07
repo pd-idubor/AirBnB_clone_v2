@@ -12,12 +12,12 @@ class FileStorage:
         """Returns a dictionary of models currently in storage"""
         if (cls is not None):
             ret = {}
-            for k, v in FileStorage.__objects.items():
+            for k, v in self.__objects.items():
                 nom = k.split('.')
                 if nom[0] in str(cls):
                     ret[k] = v
             return (ret)
-        return FileStorage.__objects
+        return self.__objects
 
     def new(self, obj):
         """Adds new object to storage dictionary"""

@@ -10,19 +10,19 @@ from models.city import City
 
 class State(BaseModel, Base):
     """ State class """
+    __tablename__ = "states"
+    name = Column(String(128), nullable=False)
+
     if getenv("HBNB_TYPE_STORAGE") == 'db':
-        __tablename__ = "states"
-        name = Column(String(128), nullable=False)
         cities = relationship("City",
-                              cascade="delete",
+                              cascade="all, delete, delete-orphan",
                               backref="state")
 
     else:
-        name = ""
-
         @property
         def cities(self):
             """Return list of related city objects"""
+            from models import storage
             city_list = []
             cities_dict = storage.all(City)
 
