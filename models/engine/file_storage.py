@@ -56,6 +56,10 @@ class FileStorage:
         except FileNotFoundError:
             pass
 
+    def close(self):
+        """Calls reload method for serialization"""
+        self.reload()
+
     def delete(self, obj=None):
         """Deletes obj from __objects if present"""
         try:

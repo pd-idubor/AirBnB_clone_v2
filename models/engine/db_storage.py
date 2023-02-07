@@ -40,7 +40,7 @@ class DBStorage():
         result = []
         objects_dict = {}
         if cls is not None:
-            result = self.__session.query(eval(cls)).all()
+            result = self.__session.query(cls).all()
             for obj in result:
                 key = obj.__class__.__name__ + '.' + obj.id
                 objects_dict[key] = (obj)
@@ -81,5 +81,5 @@ class DBStorage():
         self.__session = Session()
 
     def close(self):
-        """ Closes a session"""
+        """Closes a session"""
         self.__session.close()
